@@ -11,7 +11,6 @@ export default class Dashboard extends Component {
   state = {
     history: [],
     balance: 0,
-    input: '',
     deposit: 0,
     withdraw: 0,
   };
@@ -19,73 +18,53 @@ export default class Dashboard extends Component {
   static propTypes = {
     history: PropTypes.array,
     balance: PropTypes.number,
-    input: PropTypes.string,
     deposit: PropTypes.number,
     withdraw: PropTypes.number,
   };
 
-  onChange = e => {
-    this.setState({
-      input: Number(e.target.value),
-    });
-  };
-
-  handleDepositBtnClick = () => {
-    if (this.state.input === 0 || this.state.input === '') {
-      alert('Введите сумму для проведения операции!');
-      this.setState({ input: '' });
-      return;
-    }
+  handleDepositBtnClick = input => {
     const addTransaction = {
       id: shortid.generate(),
       date: date.toLocaleString(),
-      amount: this.state.input,
+      amount: input,
       type: 'Deposit',
     };
     this.setState(state => ({
-      deposit: state.deposit + state.input,
-      balance: state.balance + state.input,
+      deposit: state.deposit + input,
+      balance: state.balance + input,
       history: [...state.history, addTransaction],
     }));
-    this.setState({ input: '' });
   };
 
-  handleWithdrawBtnClick = () => {
-    if (this.state.balance < this.state.input || this.state.input === '') {
+  handleWithdrawBtnClick = input => {
+    if (this.state.balance < input || input === '') {
       alert('На счету недостаточно средств для проведения операции!');
-      this.setState({ input: '' });
       return;
     }
-    if (this.state.input === 0) {
-      alert('Введите сумму для проведения операции!');
-      this.setState({ input: '' });
-      return;
-    }
+
     const addTransaction = {
       id: shortid.generate(),
       date: date.toLocaleString(),
-      amount: this.state.input,
+      amount: input,
       type: 'Withdrawal',
     };
     this.setState(state => ({
-      withdraw: state.withdraw + state.input,
-      balance: state.balance - state.input,
+      withdraw: state.withdraw + input,
+      balance: state.balance - input,
       history: [...state.history, addTransaction],
     }));
-    this.setState({ input: '' });
   };
 
   render() {
-    const { balance, deposit, withdraw, input, history } = this.state;
+    const { balance, deposit, withdraw, history } = this.state;
 
     return (
       <div className="dashboard">
         <Controls
-          onChange={this.onChange}
           handleDepositBtnClick={this.handleDepositBtnClick}
           handleWithdrawBtnClick={this.handleWithdrawBtnClick}
-          input={String(input)}
           deposit={deposit}
+          balance={balance}
         />
         <Balance balance={balance} deposit={deposit} withdraw={withdraw} />
 

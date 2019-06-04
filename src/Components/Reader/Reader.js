@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Publication from './ReaderPublication';
-import Counter from './ReaderCounter';
-import Controls from './ReaderControls';
+import Publication from './Publication';
+import Counter from './Counter';
+import Controls from './Controls';
 import styles from './Reader.module.css';
 
 export default class Reader extends Component {
@@ -13,9 +13,6 @@ export default class Reader extends Component {
 
   static propTypes = {
     items: PropTypes.array,
-    number: PropTypes.number,
-    step: PropTypes.number,
-    move: PropTypes.number,
   };
 
   state = {

@@ -1,42 +1,64 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+// import PropTypes from 'prop-types';
 import styles from './Dashboard.module.css';
 
-const Controls = ({
-  onChange,
-  handleDepositBtnClick,
-  handleWithdrawBtnClick,
-  input,
-}) => (
-  <section className={styles.controls}>
-    <input
-      className={styles.input}
-      type="number"
-      onChange={onChange}
-      value={input}
-    />
-    <button
-      className={styles.btn}
-      type="button"
-      onClick={handleDepositBtnClick}
-    >
-      Deposit
-    </button>
-    <button
-      type="button"
-      className={styles.btn}
-      onClick={handleWithdrawBtnClick}
-      value={input}
-    >
-      Withdraw
-    </button>
-  </section>
-);
+export default class Controls extends Component {
+  state = {
+    input: '',
+  };
 
-Controls.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  handleDepositBtnClick: PropTypes.func.isRequired,
-  handleWithdrawBtnClick: PropTypes.func.isRequired,
-  input: PropTypes.string.isRequired,
-};
-export default Controls;
+  onChange = e => {
+    this.setState({
+      input: Number(e.target.value),
+    });
+  };
+
+  onDepositBtnClick = () => {
+    if (this.state.input === 0 || this.state.input === '') {
+      alert('Введите сумму для проведения операции!');
+      this.setState({ input: '' });
+      return;
+    }
+
+    this.props.handleDepositBtnClick(this.state.input);
+    this.setState({ input: '' });
+  };
+
+  onWithdrawBtnClick = () => {
+    if (this.state.input === 0) {
+      alert('Введите сумму для проведения операции!');
+      this.setState({ input: '' });
+      return;
+    }
+    this.props.handleWithdrawBtnClick(this.state.input);
+    this.setState({ input: '' });
+  };
+
+  render() {
+    const { input } = this.state;
+    return (
+      <section className={styles.controls}>
+        <input
+          className={styles.input}
+          type="number"
+          value={input}
+          onChange={this.onChange}
+        />
+        <button
+          className={styles.btn}
+          type="button"
+          onClick={this.onDepositBtnClick}
+        >
+          Deposit
+        </button>
+        <button
+          type="button"
+          className={styles.btn}
+          onClick={this.onWithdrawBtnClick}
+        >
+          Withdraw
+        </button>
+      </section>
+    );
+  }
+}
